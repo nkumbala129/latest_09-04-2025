@@ -17,14 +17,12 @@ API_ENDPOINT = "/api/v2/cortex/agent:run"
 API_TIMEOUT = 50000  # in milliseconds
 CORTEX_SEARCH_SERVICES = "CORTEX_SEARCH_TUTORIAL_DB.PUBLIC.BAYREN2"
 
-# Semantic model options
-SEMANTIC_MODEL_OPTIONS = {
-    "Green Residences": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."MULTIFAMILYSTAGE"/Green_Residences.yaml'
-}
+# Single semantic model
+SEMANTIC_MODEL = '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."MULTIFAMILYSTAGE"/Green_Residences.yaml'
 
 # Streamlit Page Config
 st.set_page_config(
-    page_title="welcome to Cortex AI Assistant",
+    page_title="Welcome to Cortex AI Assistant",
     layout="wide",
     initial_sidebar_state="auto"
 )
@@ -64,7 +62,7 @@ st.markdown("""
 
 # Authentication logic
 if not st.session_state.authenticated:
-    st.title("Welcome to Snowflake Cortex AI ")
+    st.title("Welcome to Snowflake Cortex AI")
     st.markdown("Please login to interact with your data")
 
     st.session_state.username = st.text_input("Enter Snowflake Username:", value=st.session_state.username)
@@ -177,7 +175,7 @@ else:
                         st.error(f"❌ Failed to parse SSE data: {str(e)} - Data: {data_str}")
         return events
 
-    def snowflake_api_call(query: str, is_structured: bool = False, semantic_model: str = SEMANTIC_MODEL_OPTIONS["Green Residences"]):
+    def snowflake_api_call(query: str, is_structured: bool = False):
         payload = {
             "model": "mistral-large",
             "messages": [{"role": "user", "content": [{"type": "text", "text": query}]}],
@@ -185,7 +183,7 @@ else:
         }
         if is_structured:
             payload["tools"].append({"tool_spec": {"type": "cortex_analyst_text_to_sql", "name": "analyst1"}})
-            payload["tool_resources"] = {"analyst1": {"semantic_model_file": semantic_model}}
+            payload["tool_resources"] = {"analyst1": {"semantic_model_file": SEMANTIC_MODEL}}
         else:
             payload["tools"].append({"tool_spec": {"type": "cortex_search", "name": "search1"}})
             payload["tool_resources"] = {"search1": {"name": CORTEX_SEARCH_SERVICES, "max_results": 1}}
@@ -357,21 +355,19 @@ else:
                 "- [Contact Support](https://www.snowflake.com/en/support/)"
             )
 
-    st.title(" Cortex AI Assistant")
+    st.title("Cortex AI Assistant")
 
-    selected_model_name = st.sidebar.selectbox("Select Semantic Model", list(SEMANTIC_MODEL_OPTIONS.keys()), index=1)  # Default to "CC"
-    selected_semantic_model = SEMANTIC_MODEL_OPTIONS[selected_model_name]
-    
-    semantic_model_filename = selected_semantic_model.split("/")[-1]
+    # Display the fixed semantic model
+    semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
     st.markdown(f"Semantic Model: `{semantic_model_filename}`")
 
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
         "What is BayREN?",
-        "what is codes and standards program",
-        "Give me all 6 programs names",
+        "What is codes and standards program?",
+        "Give me all 6 program names.",
         "Show total energy savings by county.",
-        "how many active projects are there in multi family program"
+        "How many active projects are there in the multi-family program?"
     ]
     query = st.chat_input("Ask your question...")
 
@@ -404,7 +400,7 @@ else:
         with st.chat_message("user"):
             st.markdown(query)
         with st.chat_message("assistant"):
-            with st.spinner("Cool..Fetching the data... "):
+            with st.spinner("Cool..Fetching the data..."):
                 is_structured = is_structured_query(query)
                 is_complete = is_complete_query(query)
                 is_summarize = is_summarize_query(query)
@@ -424,12 +420,12 @@ else:
                     else:
                         st.warning("⚠️ Failed to generate a summary.")
                 elif is_structured:
-                    response = snowflake_api_call(query, is_structured=True, semantic_model=selected_semantic_model)
+                    response = snowflake_api_call(query, is_structured=True)
                     sql, _ = process_sse_response(response, is_structured=True)
                     if sql:
                         results = run_snowflake_query(sql)
                         if results is not None and not results.empty:
-                            summary = generate_result_summary(results)  # Updated summary generation
+                            summary = generate_result_summary(results)
                             st.markdown("**🛠️ Generated SQL Query:**")
                             with st.expander("View SQL Query", expanded=False):  # Collapsible SQL
                                 st.code(sql, language="sql")
@@ -449,7 +445,7 @@ else:
                     else:
                         st.warning("⚠️ No SQL generated.")
                 else:
-                    response = snowflake_api_call(query, is_structured=False, semantic_model=selected_semantic_model)
+                    response = snowflake_api_call(query, is_structured=False)
                     _, search_results = process_sse_response(response, is_structured=False)
                     if search_results:
                         raw_result = search_results[0]
