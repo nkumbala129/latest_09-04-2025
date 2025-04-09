@@ -257,8 +257,10 @@ else:
             if not initial_summary:
                 return "⚠️ Unable to generate an initial summary."
 
-            # Check if the query is about the highest kWh savings
-            if "kwh savings" in st.session_state.current_query.lower() and "highest" in st.session_state.current_query.lower():
+            # Check if the query is about the highest kWh savings, only if current_query exists
+            if (st.session_state.current_query is not None and 
+                "kwh savings" in st.session_state.current_query.lower() and 
+                "highest" in st.session_state.current_query.lower()):
                 # Assuming the DataFrame has columns like 'county' and 'kwh_savings'
                 if 'county' in results.columns.str.lower() and 'kwh_savings' in results.columns.str.lower():
                     # Find the row with the maximum kWh savings
