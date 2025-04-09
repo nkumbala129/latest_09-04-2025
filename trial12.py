@@ -409,7 +409,7 @@ else:
         with st.chat_message("user"):
             st.markdown(query)
         with st.chat_message("assistant"):
-            with st.spinner("Cool..Fetching the data... 🤖"):
+            with st.spinner("Cool..Fetching the data... "):
                 is_structured = is_structured_query(query)
                 is_complete = is_complete_query(query)
                 is_summarize = is_summarize_query(query)
