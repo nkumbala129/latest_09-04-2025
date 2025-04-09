@@ -19,12 +19,7 @@ CORTEX_SEARCH_SERVICES = "CORTEX_SEARCH_TUTORIAL_DB.PUBLIC.BAYREN2"
 
 # Semantic model options
 SEMANTIC_MODEL_OPTIONS = {
-    "CMP": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."CMP_STAGE"/cmp 1 copy.yaml',
-    "MFP": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."MULTIFAMILYSTAGE"/multifamily.yaml',
-    "CC": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."CC_STAGE"/Climate_Career_Final_SM_Draft.yaml',
-    "WUSaves": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."WUSAVE_STAGE"/water_upgrades_save.yaml',
-    "SF": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."SF_STAGE"/single_family_sm.yaml',
-    "GL": '@"CORTEX_TUTORIAL_DB"."PUBLIC"."GL_STAGE"/gl_projects.yaml',
+    "Green Residences": '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."MULTIFAMILYSTAGE"/Green_Residences.yaml'
 }
 
 # Streamlit Page Config
