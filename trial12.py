@@ -370,14 +370,12 @@ else:
 
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
-        "What is BayREN?",
         "What is the Green Residences program?",
         "Show total energy savings by county for Green Residences.",
         "Which county has the highest kWh savings?",
         "How many homes were retrofitted in Alameda County?",
         "What are the thermal savings in San Francisco?",
-        "Give me all 6 program names.",
-        "How many active projects are there in the multi-family program?",
+        "How many active projects are there in the Green Residences program?",
         "What is the average kWh savings across Sonoma and Napa?",
         "Describe the energy savings technologies used in Green Residences."
     ]
@@ -415,4 +413,73 @@ else:
         with st.chat_message("assistant"):
             with st.spinner("Cool..Fetching the data..."):
                 is_structured = is_structured_query(query)
-                is
+                is_complete = is_complete_query(query)
+                is_summarize = is_summarize_query(query)
+                is_suggestion = is_question_suggestion_query(query)  # New check
+
+                if is_suggestion:  # Handle question suggestion request
+                    st.markdown("**Here are some questions you can ask me:**")
+                    for i, q in enumerate(sample_questions, 1):
+                        st.write(f"{i}. {q}")
+                    st.info("Feel free to ask any of these or come up with your own related to energy savings, Green Residences, or other programs!")
+                    # Store the query but not results, as this is informational
+                    st.session_state.current_query = query
+                    st.session_state.current_results = None
+                    st.session_state.current_sql = None
+                    st.session_state.current_summary = None
+
+                elif is_complete:
+                    response = complete(query)
+                    if response:
+                        st.markdown("**✍️ Generated Response:**")
+                        st.write(response)
+                    else:
+                        st.warning("⚠️ Failed to generate a response.")
+                elif is_summarize:
+                    summary = summarize(query)
+                    if summary:
+                        st.markdown("**📝 Summary:**")
+                        st.write(summary)
+                    else:
+                        st.warning("⚠️ Failed to generate a summary.")
+                elif is_structured:
+                    response = snowflake_api_call(query, is_structured=True)
+                    sql, _ = process_sse_response(response, is_structured=True)
+                    if sql:
+                        results = run_snowflake_query(sql)
+                        if results is not None and not results.empty:
+                            summary = generate_result_summary(results)
+                            st.markdown("**🛠️ Generated SQL Query:**")
+                            with st.expander("View SQL Query", expanded=False):  # Collapsible SQL
+                                st.code(sql, language="sql")
+                            st.markdown("**📝 Summary of Query Results:**")
+                            st.write(summary)
+                            st.markdown(f"**📊 Query Results ({len(results)} rows):**")
+                            st.dataframe(results)
+                            st.markdown("**📈 Visualization:**")
+                            display_chart_tab(results, prefix=f"chart_{hash(query)}")
+                            # Store results in session state
+                            st.session_state.current_query = query
+                            st.session_state.current_results = results
+                            st.session_state.current_sql = sql
+                            st.session_state.current_summary = summary
+                        else:
+                            st.warning("⚠️ No data found.")
+                    else:
+                        st.warning("⚠️ No SQL generated.")
+                else:
+                    response = snowflake_api_call(query, is_structured=False)
+                    _, search_results = process_sse_response(response, is_structured=False)
+                    if search_results:
+                        raw_result = search_results[0]
+                        summary = summarize(raw_result)
+                        if summary:
+                            st.markdown("**🔍 Here is the Answer to your query:**")
+                            st.write(summary)
+                            last_sentence = summary.split(".")[-2] if "." in summary else summary
+                            st.success(f"✅ Key Insight: {last_sentence.strip()}")
+                        else:
+                            st.markdown("**🔍 Key Information (Unsummarized):**")
+                            st.write(summarize_unstructured_answer(raw_result))
+                    else:
+                        st.warning("⚠️ No relevant search results found.")
