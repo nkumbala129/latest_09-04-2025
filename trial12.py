@@ -405,8 +405,8 @@ else:
 
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
-        "What is the Eco sustain innovatins?",
-        "What is the Green Residences program?",
+        "What is Eco Sustain Innovations?",
+        "What is Green Residences program?",
         "Describe the energy savings technologies used in Green Residences.",
         "Show total energy savings by county.",
         "Which county has the highest kWh savings?",
