@@ -122,7 +122,7 @@ else:
 
     def is_structured_query(query: str):
         structured_patterns = [
-            r'\b(county|from|where|group by|order by|join|sum|count|avg|max|min|least|highest|which)\b',
+            r'\b(county|from|where|group by|order by|how much|sum|count|avg|max|min|least|highest|which)\b',
             r'\b(total|revenue|sales|profit|projects|jurisdiction|month|year|energy savings|kwh)\b'
         ]
         return any(re.search(pattern, query.lower()) for pattern in structured_patterns)
@@ -392,7 +392,7 @@ else:
         "Show total energy savings by county.",
         "Which county has the highest kWh savings?",
         "How many homes were retrofitted in Alameda County?",
-        "What are the thermal savings in San Francisco?",
+        "how much thermal savings in San Francisco?",
         "How many active projects are there",
         "What is the average kWh savings",
         "Describe the energy savings technologies used in Green Residences."
