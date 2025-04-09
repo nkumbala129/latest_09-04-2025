@@ -412,7 +412,8 @@ else:
         "Which county has the highest kWh savings?",
         "How many active projects are there",
         "What is the average kWh savings",
-        "Which counties has the min and max of kWh savings"
+        "Which counties has the min and max of kWh savings",
+        "Which counties has the least and highest of kWh savings"
     ]
 
     query = st.chat_input("Ask your question...")
