@@ -22,7 +22,7 @@ SEMANTIC_MODEL = '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."MULTIFAMILYSTAGE"/Green
 
 # Streamlit Page Config
 st.set_page_config(
-    page_title="Welcome to Cortex AI Assistant by Dilytics",
+    page_title="Welcome to Cortex AI Assistant ",
     layout="wide",
     initial_sidebar_state="auto"
 )
@@ -397,7 +397,7 @@ else:
                 "- [Contact Support](https://www.snowflake.com/en/support/)"
             )
 
-    st.title("Cortex AI Assistant")
+    st.title("Cortex AI Assistant by DiLytics")
 
     # Display the fixed semantic model
     semantic_model_filename = SEMANTIC_MODEL.split("/")[-1]
