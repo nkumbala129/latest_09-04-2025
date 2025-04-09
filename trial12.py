@@ -122,7 +122,7 @@ else:
 
     def is_structured_query(query: str):
         structured_patterns = [
-            r'\b(select|from|where|group by|order by|join|sum|count|avg|max|min|least|highest|which)\b',
+            r'\b(select|from|group by|order by|join|sum|count|avg|max|min|least|highest|which)\b',
             r'\b(total|revenue|sales|profit|projects|jurisdiction|month|year|energy savings|kwh)\b'
         ]
         return any(re.search(pattern, query.lower()) for pattern in structured_patterns)
@@ -134,6 +134,13 @@ else:
     def is_summarize_query(query: str):
         summarize_patterns = [r'\b(summarize|summary|condense)\b']
         return any(re.search(pattern, query.lower()) for pattern in summarize_patterns)
+
+    def is_question_suggestion_query(query: str):
+        suggestion_patterns = [
+            r'\b(what|which|how)\b.*\b(questions|type of questions|queries)\b.*\b(ask|can i ask|pose)\b',
+            r'\b(give me|show me|list)\b.*\b(questions|examples|sample questions)\b'
+        ]
+        return any(re.search(pattern, query.lower()) for pattern in suggestion_patterns)
 
     def complete(prompt, model="mistral-large"):
         try:
@@ -291,7 +298,7 @@ else:
             type_index = chart_options.index(default_type)
         except ValueError:
             type_index = 0
-        chart_type = col3.selectbox("Chart Type", chart_options, index=type_index, key=f"{prefix}_type")
+        chart_type = col3.selectbox("Chart Type", chart_options-tracking, index=type_index, key=f"{prefix}_type")
 
         # Display the chart based on the selected type.
         if chart_type == "Line Chart":
@@ -364,11 +371,17 @@ else:
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
         "What is BayREN?",
-        "What is codes and standards program?",
+        "What is the Green Residences program?",
+        "Show total energy savings by county for Green Residences.",
+        "Which county has the highest kWh savings?",
+        "How many homes were retrofitted in Alameda County?",
+        "What are the thermal savings in San Francisco?",
         "Give me all 6 program names.",
-        "Show total energy savings by county.",
-        "How many active projects are there in the multi-family program?"
+        "How many active projects are there in the multi-family program?",
+        "What is the average kWh savings across Sonoma and Napa?",
+        "Describe the energy savings technologies used in Green Residences."
     ]
+
     query = st.chat_input("Ask your question...")
 
     for sample in sample_questions:
@@ -404,8 +417,20 @@ else:
                 is_structured = is_structured_query(query)
                 is_complete = is_complete_query(query)
                 is_summarize = is_summarize_query(query)
+                is_suggestion = is_question_suggestion_query(query)  # New check
 
-                if is_complete:
+                if is_suggestion:  # Handle question suggestion request
+                    st.markdown("**Here are some questions you can ask me:**")
+                    for i, q in enumerate(sample_questions, 1):
+                        st.write(f"{i}. {q}")
+                    st.info("Feel free to ask any of these or come up with your own related to energy savings, Green Residences, or other programs!")
+                    # Store the query but not results, as this is informational
+                    st.session_state.current_query = query
+                    st.session_state.current_results = None
+                    st.session_state.current_sql = None
+                    st.session_state.current_summary = None
+
+                elif is_complete:
                     response = complete(query)
                     if response:
                         st.markdown("**✍️ Generated Response:**")
