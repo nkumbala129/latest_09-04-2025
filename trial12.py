@@ -371,12 +371,13 @@ else:
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
         "What is the Green Residences program?",
+        "What is the Eco sustain innovatiins?",
         "Show total energy savings by county.",
         "Which county has the highest kWh savings?",
         "How many homes were retrofitted in Alameda County?",
         "What are the thermal savings in San Francisco?",
         "How many active projects are there",
-        "What is the average kWh savings across Sonoma and Napa?",
+        "What is the average kWh savings",
         "Describe the energy savings technologies used in Green Residences."
     ]
 
@@ -395,7 +396,7 @@ else:
                 st.markdown("**🛠️ Generated SQL Query:**")
                 with st.expander("View SQL Query", expanded=False):  # Collapsible SQL
                     st.code(st.session_state.current_sql, language="sql")
-                st.markdown("**📝 Summary of Query Results:**")
+                st.markdown("**📝 Summary :**")
                 st.write(st.session_state.current_summary)
                 st.markdown(f"**📊 Query Results ({len(st.session_state.current_results)} rows):**")
                 st.dataframe(st.session_state.current_results)
