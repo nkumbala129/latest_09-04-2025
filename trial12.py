@@ -122,7 +122,7 @@ else:
 
     def is_structured_query(query: str):
         structured_patterns = [
-            r'\b(county|from|where|group by|order by|how much|sum|count|avg|max|min|least|highest|which)\b',
+            r'\b(county|from|where|group by|order by|join|sum|count|avg|max|min|least|highest|which)\b',
             r'\b(total|revenue|sales|profit|projects|jurisdiction|month|year|energy savings|kwh)\b'
         ]
         return any(re.search(pattern, query.lower()) for pattern in structured_patterns)
@@ -270,8 +270,13 @@ else:
                     # Format the custom summary
                     return f"The highest kilowatt-hours (kWh) savings county is {county} and the value is approximately {kwh_value:,.0f}."
                 else:
-                    # Fallback if column names don't match
-                    return "⚠️ Unable to determine county and kWh savings from results."
+                    # Fallback to summarize and complete for natural language conversion
+                    prompt = f"Convert the following query results into a natural language summary:\n\n{initial_summary}"
+                    natural_language_summary = complete(prompt)
+                    if natural_language_summary:
+                        return natural_language_summary
+                    else:
+                        return "⚠️ Unable to generate a natural language summary from results."
 
             # Fallback to generic summary for other queries
             prompt = f"Provide a concise, meaningful summary of the following query results:\n\n{initial_summary}"
@@ -392,7 +397,7 @@ else:
         "Show total energy savings by county.",
         "Which county has the highest kWh savings?",
         "How many homes were retrofitted in Alameda County?",
-        "how much thermal savings in San Francisco?",
+        "What are the thermal savings in San Francisco?",
         "How many active projects are there",
         "What is the average kWh savings",
         "Describe the energy savings technologies used in Green Residences."
