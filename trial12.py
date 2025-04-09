@@ -122,7 +122,7 @@ else:
 
     def is_structured_query(query: str):
         structured_patterns = [
-            r'\b(select|from|group by|order by|join|sum|count|avg|max|min|least|highest|which)\b',
+            r'\b(select|from|group by|order by|join|sum|count|avg|max|min|least|highest|which|kWh savings|county)\b',
             r'\b(total|revenue|sales|profit|projects|jurisdiction|month|year|energy savings|kwh)\b'
         ]
         return any(re.search(pattern, query.lower()) for pattern in structured_patterns)
