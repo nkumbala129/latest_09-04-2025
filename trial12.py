@@ -371,11 +371,11 @@ else:
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
         "What is the Green Residences program?",
-        "Show total energy savings by county for Green Residences.",
+        "Show total energy savings by county.",
         "Which county has the highest kWh savings?",
         "How many homes were retrofitted in Alameda County?",
         "What are the thermal savings in San Francisco?",
-        "How many active projects are there in the Green Residences program?",
+        "How many active projects are there",
         "What is the average kWh savings across Sonoma and Napa?",
         "Describe the energy savings technologies used in Green Residences."
     ]
