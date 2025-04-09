@@ -376,7 +376,7 @@ else:
 
         with logo_container:
             logo_url = "https://www.snowflake.com/wp-content/themes/snowflake/assets/img/logo-blue.svg"
-            st.image(logo_url, width=200)
+            st.image(logo_url, width=250)
 
         with button_container:
             st.session_state.debug_mode = st.checkbox("Enable Debug Mode", value=st.session_state.debug_mode)
