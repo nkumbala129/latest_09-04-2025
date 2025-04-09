@@ -177,7 +177,7 @@ else:
                         st.error(f"❌ Failed to parse SSE data: {str(e)} - Data: {data_str}")
         return events
 
-    def snowflake_api_call(query: str, is_structured: bool = False, semantic_model: str = SEMANTIC_MODEL_OPTIONS["CMP"]):
+    def snowflake_api_call(query: str, is_structured: bool = False, semantic_model: str = SEMANTIC_MODEL_OPTIONS["Green Residences"]):
         payload = {
             "model": "mistral-large",
             "messages": [{"role": "user", "content": [{"type": "text", "text": query}]}],
