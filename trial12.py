@@ -23,7 +23,7 @@ SEMANTIC_MODEL = '@"CORTEX_SEARCH_TUTORIAL_DB"."PUBLIC"."MULTIFAMILYSTAGE"/Green
 # Streamlit Page Config
 st.set_page_config(
     page_title="Welcome to Cortex AI Assistant",
-    layout="middle",
+    layout="wide",
     initial_sidebar_state="auto"
 )
 
