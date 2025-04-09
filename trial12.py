@@ -249,14 +249,29 @@ else:
         return sql.strip(), search_results
 
     def generate_result_summary(results):
-        """Generate a meaningful summary of the query results using summarize and complete functions."""
+        """Generate a meaningful summary of the query results tailored to specific queries like highest kWh savings."""
         try:
             # Convert DataFrame to a readable string format for summarization
             results_text = results.to_string(index=False)
             initial_summary = summarize(results_text)
             if not initial_summary:
                 return "⚠️ Unable to generate an initial summary."
-            # Pass the initial summary to complete for a meaningful explanation
+
+            # Check if the query is about the highest kWh savings
+            if "kwh savings" in st.session_state.current_query.lower() and "highest" in st.session_state.current_query.lower():
+                # Assuming the DataFrame has columns like 'county' and 'kwh_savings'
+                if 'county' in results.columns.str.lower() and 'kwh_savings' in results.columns.str.lower():
+                    # Find the row with the maximum kWh savings
+                    max_row = results.loc[results['kwh_savings'].idxmax()]
+                    county = max_row['county']
+                    kwh_value = max_row['kwh_savings']
+                    # Format the custom summary
+                    return f"The highest kilowatt-hours (kWh) savings county is {county} and the value is approximately {kwh_value:,.0f}."
+                else:
+                    # Fallback if column names don't match
+                    return "⚠️ Unable to determine county and kWh savings from results."
+
+            # Fallback to generic summary for other queries
             prompt = f"Provide a concise, meaningful summary of the following query results:\n\n{initial_summary}"
             meaningful_summary = complete(prompt)
             if meaningful_summary:
