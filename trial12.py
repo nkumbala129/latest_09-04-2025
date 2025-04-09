@@ -359,7 +359,7 @@ else:
 
     st.title(" Cortex AI Assistant")
 
-    selected_model_name = st.sidebar.selectbox("Select Semantic Model", list(SEMANTIC_MODEL_OPTIONS.keys()), index=2)  # Default to "CC"
+    selected_model_name = st.sidebar.selectbox("Select Semantic Model", list(SEMANTIC_MODEL_OPTIONS.keys()), index=1)  # Default to "CC"
     selected_semantic_model = SEMANTIC_MODEL_OPTIONS[selected_model_name]
     
     semantic_model_filename = selected_semantic_model.split("/")[-1]
