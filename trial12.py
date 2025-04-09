@@ -428,12 +428,12 @@ else:
             st.markdown(st.session_state.current_query)
         with st.chat_message("assistant"):
             if st.session_state.current_results is not None and not st.session_state.current_results.empty:
-                st.markdown("**🛠️ Generated SQL Query:**")
+                st.markdown("**Generated SQL Query:**")
                 with st.expander("View SQL Query", expanded=False):  # Collapsible SQL
                     st.code(st.session_state.current_sql, language="sql")
-                st.markdown("**📝 Summary :**")
+                st.markdown("**Summary :**")
                 st.write(st.session_state.current_summary)
-                st.markdown(f"**📊 Query Results ({len(st.session_state.current_results)} rows):**")
+                st.markdown(f"**Query Results ({len(st.session_state.current_results)} rows):**")
                 st.dataframe(st.session_state.current_results)
                 st.markdown("**📈 Visualization:**")
                 display_chart_tab(st.session_state.current_results, prefix=f"chart_{hash(st.session_state.current_query)}")
@@ -474,7 +474,7 @@ else:
                 elif is_summarize:
                     summary = summarize(query)
                     if summary:
-                        st.markdown("**📝 Summary:**")
+                        st.markdown("**Summary:**")
                         st.write(summary)
                     else:
                         st.warning("⚠️ Failed to generate a summary.")
@@ -485,12 +485,12 @@ else:
                         results = run_snowflake_query(sql)
                         if results is not None and not results.empty:
                             summary = generate_result_summary(results)
-                            st.markdown("**🛠️ Generated SQL Query:**")
+                            st.markdown("**Generated SQL Query:**")
                             with st.expander("View SQL Query", expanded=False):  # Collapsible SQL
                                 st.code(sql, language="sql")
-                            st.markdown("**📝 Summary of Query Results:**")
+                            st.markdown("**Summary:**")
                             st.write(summary)
-                            st.markdown(f"**📊 Query Results ({len(results)} rows):**")
+                            st.markdown(f"**Query Results ({len(results)} rows):**")
                             st.dataframe(results)
                             st.markdown("**📈 Visualization:**")
                             display_chart_tab(results, prefix=f"chart_{hash(query)}")
@@ -510,10 +510,10 @@ else:
                         raw_result = search_results[0]
                         summary = summarize(raw_result)
                         if summary:
-                            st.markdown("**🔍 Here is the Answer to your query:**")
+                            st.markdown("**Here is the Answer:**")
                             st.write(summary)
                             last_sentence = summary.split(".")[-2] if "." in summary else summary
-                            st.success(f"✅ Key Insight: {last_sentence.strip()}")
+                            st.success(f" Key Insight: {last_sentence.strip()}")
                         else:
                             st.markdown("**🔍 Key Information (Unsummarized):**")
                             st.write(summarize_unstructured_answer(raw_result))
