@@ -370,14 +370,11 @@ else:
 
     st.sidebar.subheader("Sample Questions")
     sample_questions = [
-        "What is BayREN?",
         "What is the Green Residences program?",
         "Show total energy savings by county for Green Residences.",
         "Which county has the highest kWh savings?",
-        "How many homes were retrofitted in Alameda County?",
         "What are the thermal savings in San Francisco?",
-        "Give me all 6 program names.",
-        "How many active projects are there in the multi-family program?",
+        "How many active projects are there in the Green Residences program?",
         "What is the average kWh savings across Sonoma and Napa?",
         "Describe the energy savings technologies used in Green Residences."
     ]
